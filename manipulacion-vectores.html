@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios con Vectores Numericos</title>
+    <style>
+        table td {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h4>Ejercicio con Vectores</h4>
+
+    <!-- SECCIÓN DE CONFIGURACIÓN DEL VECTOR -->
+    <div>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Dimension del arreglo:</td>
+                    <td>
+                        <select id="select-dimension-arreglo">
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                            <option value="30">30</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Ingrese valor a buscar:</td>
+                    <td><input type="text" id="id-valor-busqueda" maxlength="4" size="5"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+
+    <!-- TABLA DONDE SE PRESENTA EL VECTOR -->
+    <table id="id-table-vector-numerico" border="1" cellspacing="1" cellpadding="1">
+        <thead>
+            <tr>
+                <td colspan="10">Vector numerico de N elementos</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td>
+            </tr>
+            <tr>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <!-- Botones base -->
+                <td colspan="5"><button id="btn-cargar-vector">Cargar Vector</button></td>
+                <td colspan="5"><button id="btn-vaciar-vector">Vaciar Vector</button></td>
+            </tr>
+            <!-- BOTONES NUEVOS DEL GRUPO 1, COLOCADOS AQUÍ -->
+            <tr>
+                <td colspan="2"><button id="btn-minimo">Valor Mínimo</button></td>
+                <td colspan="2"><button id="btn-maximo">Valor Máximo</button></td>
+                <td colspan="3"><button id="btn-suma">Suma Total</button></td>
+                <td colspan="3"><button id="btn-producto">Producto Total</button></td>
+            </tr>
+            <!-- FIN DE BOTONES DEL GRUPO 1 -->
+        </tfoot>
+    </table>
+
+    <hr>
+
+    <table>
+        <thead>
+            <tr>
+                <td colspan="2">Cálculos con vectores</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Resultado:</td>
+                <td colspan="2"><input type="text" id="id-txt-respuesta" size="70" readonly></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // CÓDIGO BASE 
+        let vector = [] // Vector que almacenará los valores numéricos
+        const NUM_MAXIMO_RANDOM = 50 // Límite superior del número aleatorio
+
+        // Referencias a los elementos del documento HTML
+        const tableTbody = document.querySelector('#id-table-vector-numerico > tbody')
+        const btnCargarVector = document.getElementById("btn-cargar-vector")
+        const btnVaciarVector = document.getElementById("btn-vaciar-vector")
+        const txtRespuesta = document.getElementById("id-txt-respuesta")
+        const selectDimension = document.getElementById("select-dimension-arreglo")
+
+        // Variable que define cuántos elementos tendrá el vector
+        let TOPE = parseInt(selectDimension.options[selectDimension.selectedIndex].value)
+
+        // Evento: cuando el usuario cambia la dimensión del vector
+        selectDimension.addEventListener('change', (event) => {
+            TOPE = parseInt(event.target.value)
+        })
+
+        // Evento: cargar vector con valores aleatorios
+        btnCargarVector.addEventListener('click', (event) => {
+            event.preventDefault()
+            fnCargarVector()
+            fnPresentarVector()
+        })
+
+        // Función que genera números aleatorios y los almacena en el vector
+        function fnCargarVector() {
+            for (let x = 0; x < TOPE; x++) {
+                const numero = Math.ceil(Math.random() * NUM_MAXIMO_RANDOM)
+                vector[x] = numero
+            }
+        }
+
+        // Función que muestra el contenido del vector en la tabla HTML
+        function fnPresentarVector() {
+            let contador = 0
+            let str = ''
+            while (contador < 2) {
+                str = str + `<tr>`
+                for (let x = 0; x < TOPE; x++) {
+                    if (contador === 0) {
+                        // Fila de índices
+                        str = str + `<td>${x}</td>`
+                    } else {
+                        // Fila con los valores del vector
+                        str = str + `<td bgcolor="#00FF00">${vector[x] || '-'}</td>`
+                    }
+                }
+                str = str + `</tr>`
+                contador++
+            }
+            tableTbody.innerHTML = str
+        }
+
+        // Evento: vaciar vector y limpiar tabla
+        btnVaciarVector.addEventListener('click', (event) => {
+            event.preventDefault()
+            fnVaciarVector()
+            fnPresentarVector()
+        })
+
+        // Función que vacía el vector completamente
+        function fnVaciarVector() {
+            vector = []
+        }
+
+        // CÓDIGO AGREGADO POR EL GRUPO 1
+        // Ingeniería en Software - Segundo Semestre
+
+        // Se obtienen las referencias a los nuevos botones
+        const btnMinimo = document.getElementById("btn-minimo")
+        const btnMaximo = document.getElementById("btn-maximo")
+        const btnSuma = document.getElementById("btn-suma")
+        const btnProducto = document.getElementById("btn-producto")
+
+        // FUNCIÓN 1: Valor Mínimo
+        btnMinimo.addEventListener("click", () => {
+            if (vector.length === 0) {
+                alert("Primero debe cargar el vector con valores.")
+                return
+            }
+            // Math.min devuelve el valor más pequeño del vector
+            const minimo = Math.min(...vector)
+            txtRespuesta.value = "Valor mínimo: " + minimo
+        })
+
+        // FUNCIÓN 2: Valor Máximo
+        btnMaximo.addEventListener("click", () => {
+            if (vector.length === 0) {
+                alert("Primero debe cargar el vector con valores.")
+                return
+            }
+            // Math.max devuelve el valor más grande del vector
+            const maximo = Math.max(...vector)
+            txtRespuesta.value = "Valor máximo: " + maximo
+        })
+
+        // FUNCIÓN 3: Suma Total de los valores del vector
+        btnSuma.addEventListener("click", () => {
+            if (vector.length === 0) {
+                alert("Primero debe cargar el vector con valores.")
+                return
+            }
+            // reduce recorre el vector y acumula la suma de sus elementos
+            const suma = vector.reduce((acum, val) => acum + val, 0)
+            txtRespuesta.value = "Suma total: " + suma
+        })
+
+        // FUNCIÓN 4: Producto Total de los valores del vector
+        btnProducto.addEventListener("click", () => {
+            if (vector.length === 0) {
+                alert("Primero debe cargar el vector con valores.")
+                return
+            }
+            // reduce multiplica cada elemento del vector, empezando desde 1
+            const producto = vector.reduce((acum, val) => acum * val, 1)
+            txtRespuesta.value = "Producto total: " + producto
+        })
+    </script>
+</body>
+
+</html>
